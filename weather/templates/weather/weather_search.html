@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<body style="background-color:Orange;">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<style>
+    input,h1{
+        margin-left: 10px;
+    }
+    
+</style>
+<title>Check Weather</title>
+{% endblock meta %}    
+{% block topnav%}
+<a href="/">Home</a>
+{% endblock topnav%}
+{% block content %}
+
+<h1>Check Weather</h1>
+<input id="keyword" placeholder="Enter City Name">
+<br>
+<br>
+<ul id="isi">
+</ul>
+
+<script type="text/javascript">
+    $("#keyword").keyup(function(){
+        var ketikan = $("#keyword").val();
+        console.log(ketikan);
+        $.ajax({
+            url:'/async/?city='+ketikan,
+            success:function(data){
+                var array_items = data.responses;
+                console.log(array_items);
+                $("#isi").empty();
+                var name = array_items[0].name;
+                var weather_desc = array_items[0].weather[0].description;
+                var temp = array_items[0].main.temp;
+                var humidity =array_items[0].main.humidity;
+                var wind_speed = array_items[0].wind.speed;
+                $("#isi").append("<li> City Name = " + name +"</li><li>Weather Description = "+weather_desc+"</li><li>Temperature = " + temp + " K </li><li>Humidity = "+humidity+" %</li><li> Wind Speed = "+wind_speed+" m/s</li>");
+            }
+        })
+    })
+</script>
+{% endblock content %}
